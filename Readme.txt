@@ -1,0 +1,1 @@
+Список вопросов - Assers/Resources/QuestionsData.asset.
