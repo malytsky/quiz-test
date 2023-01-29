@@ -67,7 +67,7 @@ public class QuizOptions
         isAnswered = false;
     }
     
-    //this give blink effect [if needed use or dont use]
+    //animation option button after answer
     private static async void BlinkOption(Graphic image, Color color)
     {
         Color[] colors = {Color.black, color, Color.black, color};
