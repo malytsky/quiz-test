@@ -1,14 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class QuizTopPanel
 {
-    private Text scoreText;
-    private Text timerText;
-    private List<Image> lifeImageList;
+    private readonly Text scoreText, timerText;
+    private readonly List<Image> lifeImageList;
             
     public QuizTopPanel(Text scoreText, Text timerText, List<Image> lifeImageList)
     {

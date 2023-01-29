@@ -1,5 +1,3 @@
-using System;
-
 public static class QuizVariables
 {
     public const int Lives = 3;

@@ -32,8 +32,8 @@ public class QuizModel
 
         SelectQuestion();
     }
-    
-    public void SetQuestions(QuizDataScriptable quizData)
+
+    private void SetQuestions(QuizDataScriptable quizData)
     {
         questions.AddRange(quizData.questions);
     }

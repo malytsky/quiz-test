@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class QuizOptions
 {
-    private Color correctCol, wrongCol, normalCol;
+    private readonly Color correctCol, wrongCol, normalCol;
     private bool isAnswered;
-    private List<Button> options;
+    private readonly List<Button> options;
     public event Predicate<string> OnAnswer;
     public QuizOptions(List<Button> options, Color correctCol, Color wrongCol, Color normalCol)
     {
@@ -68,12 +68,12 @@ public class QuizOptions
     }
     
     //this give blink effect [if needed use or dont use]
-    async void BlinkOption(Image image, Color color)
+    private async void BlinkOption(Image image, Color color)
     {
         Color[] colors = {Color.black, color, Color.black, color};
-        for (int i = 0; i < colors.Length; i++)
+        foreach (var col in colors)
         {
-            ChangeColor(image, colors[i]);
+            ChangeColor(image, col);
             await Task.Delay(100);
         }
     }

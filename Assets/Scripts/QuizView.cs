@@ -11,16 +11,8 @@ public class QuizView : MonoBehaviour
     [SerializeField] private List<Image> lifeImageList;
     [SerializeField] private Text questionInfoText;                 //text of question
     [SerializeField] private List<Button> options;                  //options button reference
-    
-    Predicate<string> onAnswerPredicate;
-    Action<string> onSetScoreAction;
-    Action<Question> onSetQuestionAction;
-    Action<int> onReduceLifeAction;
-    Action onGameEndAction;
-    Action onInvokingAction;
-    Action onClearAction;
 
-    //scriptableobject file
+    //scriptable object file
     [SerializeField] private QuizDataScriptable quizData;
 
     private QuizOptions quizOptions; 
@@ -37,21 +29,13 @@ public class QuizView : MonoBehaviour
         quizTopPanel = new QuizTopPanel(scoreText, timerText, lifeImageList);                 //create top panel
         quizModel = new QuizModel();                                                          //create model class for logic methods and operations
 
-        onAnswerPredicate  = btnName => Answer(btnName);
-        onSetScoreAction = text => SetScore(text);
-        onSetQuestionAction = question => SetQuestion(question);
-        onReduceLifeAction = lives => ReduceLife(lives);
-        onGameEndAction = () => GameEnd();
-        onInvokingAction = () => Invoking();
-        onClearAction = () => Clear();
-
-        quizOptions.OnAnswer += onAnswerPredicate;
-        quizModel.OnSetScore += onSetScoreAction;
-        quizModel.OnSetQuestion += onSetQuestionAction;
-        quizModel.OnReduceLife += onReduceLifeAction;
-        quizModel.OnGameEnd += onGameEndAction;
-        quizModel.OnInvoking += onInvokingAction;
-        quizModel.OnClear += onClearAction;
+        quizOptions.OnAnswer += Answer;
+        quizModel.OnSetScore += SetScore;
+        quizModel.OnSetQuestion += SetQuestion;
+        quizModel.OnReduceLife += ReduceLife;
+        quizModel.OnGameEnd += GameEnd;
+        quizModel.OnInvoking += Invoking;
+        quizModel.OnClear += Clear;
 
         StartGame();
     }
@@ -62,15 +46,15 @@ public class QuizView : MonoBehaviour
         quizModel.StartGame(quizData);
     }
 
-    public void Clear()
+    private void Clear()
     {
-        quizOptions.OnAnswer -= onAnswerPredicate;
-        quizModel.OnSetScore -= onSetScoreAction;
-        quizModel.OnSetQuestion -= onSetQuestionAction;
-        quizModel.OnReduceLife -= onReduceLifeAction;
-        quizModel.OnGameEnd -= onGameEndAction;
-        quizModel.OnInvoking -= onInvokingAction;
-        quizModel.OnClear -= onClearAction;
+        quizOptions.OnAnswer -= Answer;
+        quizModel.OnSetScore -= SetScore;
+        quizModel.OnSetQuestion -= SetQuestion;
+        quizModel.OnReduceLife -= ReduceLife;
+        quizModel.OnGameEnd -= GameEnd;
+        quizModel.OnInvoking -= Invoking;
+        quizModel.OnClear -= Clear;
         
         quizOptions.Clear();
         quizOptions = null;
@@ -79,29 +63,29 @@ public class QuizView : MonoBehaviour
         quizModel = null;
     }
 
-    public void GameEnd()
+    private void GameEnd()
     {
         QuizVariables.Time = currentTime;
     }
 
     // display the question on the screen
-    public void SetQuestion(Question question)
+    private void SetQuestion(Question question)
     {
         quizQuestion.Init(question, questionInfoText, questionImg);
         quizOptions.UpdateButtons(question.questionOptions);
     }
 
-    public void SetScore(string text)
+    private void SetScore(string text)
     {
         quizTopPanel.SetScore(text);
     }
-    
-    public void ReduceLife(int remainingLife) // if answer is wrong
+
+    private void ReduceLife(int remainingLife) // if answer is wrong
     {
         quizTopPanel.ReduceLife(remainingLife);
     }
 
-    public bool Answer(string selectedOption)
+    private bool Answer(string selectedOption)
     {
         return quizModel.Answer(selectedOption);
     }
@@ -112,17 +96,17 @@ public class QuizView : MonoBehaviour
         SetTime();
     }
 
-    public void Invoking()
+    private void Invoking()
     {
-        Invoke("SelectQuestion", 0.4f);
+        Invoke(nameof(SelectQuestion), 0.4f);
     }
 
     private void SelectQuestion()
     {
         quizModel.SelectQuestion();
     }
-    
-    void SetTime()
+
+    private void SetTime()
     {
         TimeSpan time = TimeSpan.FromSeconds(currentTime);            //set the time and convert to Time format
         quizTopPanel.SetTime(QuizVariables.TextTime + time.ToString("mm':'ss"));
