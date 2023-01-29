@@ -41,7 +41,7 @@ public class QuizModel
     public void SelectQuestion()
     {
         //get the random or not random question from list
-        int value = QuizVariables.RandomOrder ? Random.Range(0, questions.Count) : 0;
+        var value = QuizVariables.RandomOrder ? Random.Range(0, questions.Count) : 0;
         //set the selected question
         currentQuestion = questions[value];
         //send the question to quizView
@@ -53,7 +53,7 @@ public class QuizModel
     //called to check is the answer correct
     public bool Answer(string selectedOption)
     {
-        bool correct = false;
+        var correct = false;
   
         if (currentQuestion.questionAnswer == selectedOption) // check for answer
         {
