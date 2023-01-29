@@ -48,19 +48,21 @@ public class QuizOptions
 
     public void UpdateButtons(List<string> questionOptions) 
     {
-        //assign invisible unused option buttons
-        for (var i = questionOptions.Count; i < options.Count; i++)
+        for (var i = 0; i < options.Count; i++)
         {
-            options[i].gameObject.SetActive(false);
-        }
-
-        for (int i = 0; i < questionOptions.Count; i++)
-        {
-            //set the child text
-            options[i].GetComponentInChildren<Text>().text = questionOptions[i];
-            options[i].name = questionOptions[i];    //set the name of button
-            options[i].image.color = normalCol; //set color of button to normal
-            options[i].gameObject.SetActive(true);
+            if (i < questionOptions.Count)
+            {
+                //set the child text
+                options[i].GetComponentInChildren<Text>().text = questionOptions[i];
+                options[i].name = questionOptions[i];    //set the name of button
+                options[i].image.color = normalCol; //set color of button to normal
+                options[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                //assign invisible unused option buttons
+                options[i].gameObject.SetActive(false);
+            }
         }
         isAnswered = false;
     }
