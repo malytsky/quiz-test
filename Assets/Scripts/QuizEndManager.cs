@@ -7,7 +7,8 @@ public class QuizEndManager : MonoBehaviour
 {
     [SerializeField] private Button btnMenu;
     [SerializeField] private Text scoreText, timerText, resultText, correctAnswers;
-    void Start()
+
+    private void Start()
     {
         if (btnMenu != null)
         {
@@ -16,7 +17,7 @@ public class QuizEndManager : MonoBehaviour
 
         scoreText.text = QuizVariables.TextScore + QuizVariables.Score;
         
-        TimeSpan time = TimeSpan.FromSeconds(QuizVariables.Time);
+        var time = TimeSpan.FromSeconds(QuizVariables.Time);
         timerText.text = QuizVariables.TextTime + time.ToString("mm':'ss");
 
         if (QuizVariables.CorrectAnswers < QuizVariables.QuestionNums)
@@ -32,7 +33,7 @@ public class QuizEndManager : MonoBehaviour
         }
     }
 
-    private void OnMenuButtonClick()
+    private static void OnMenuButtonClick()
     {
         SceneManager.LoadScene("GameStart");
     }

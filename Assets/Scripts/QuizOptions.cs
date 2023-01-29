@@ -18,31 +18,29 @@ public class QuizOptions
         this.options = options;
 
         //listener for all options
-        foreach (Button localBtn in options)
+        foreach (var localBtn in options)
         {
             localBtn.onClick.AddListener(() => OnClick(localBtn));
         }
     }
     
     //Options click
-    void OnClick(Button btn)
+    private void OnClick(Selectable btn)
     {
         //if not answered before
-        if (!isAnswered)
-        {
-            //set answered true
-            isAnswered = true;
-            //check if answer is correct
-            var isTrueAnswer = OnAnswer != null && OnAnswer(btn.name);
+        if (isAnswered) return;
+        //set answered true
+        isAnswered = true;
+        //check if answer is correct
+        var isTrueAnswer = OnAnswer != null && OnAnswer(btn.name);
 
-            //blinking for true and wrong
-            BlinkOption(btn.image, isTrueAnswer ? correctCol : wrongCol);
-        }
+        //blinking for true and wrong
+        BlinkOption(btn.image, isTrueAnswer ? correctCol : wrongCol);
     }
     
     public void Clear()
     {
-        foreach (Button localBtn in options)
+        foreach (var localBtn in options)
         {
             localBtn.onClick.RemoveAllListeners();
         }
@@ -68,7 +66,7 @@ public class QuizOptions
     }
     
     //this give blink effect [if needed use or dont use]
-    private async void BlinkOption(Image image, Color color)
+    private static async void BlinkOption(Graphic image, Color color)
     {
         Color[] colors = {Color.black, color, Color.black, color};
         foreach (var col in colors)
@@ -78,7 +76,7 @@ public class QuizOptions
         }
     }
 
-    void ChangeColor(Image image, Color color)
+    private static void ChangeColor(Graphic image, Color color)
     {
         if (image != null)
         {

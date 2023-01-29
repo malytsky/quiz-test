@@ -45,7 +45,7 @@ public class QuizModel
         //set the selected question
         currentQuestion = questions[value];
         //send the question to quizView
-        if (OnSetQuestion != null) OnSetQuestion(currentQuestion);
+        OnSetQuestion?.Invoke(currentQuestion);
 
         questions.RemoveAt(value);
     }
@@ -66,7 +66,7 @@ public class QuizModel
         {
             //minus life
             lives--;
-            if (OnReduceLife != null) OnReduceLife(lives);
+            OnReduceLife?.Invoke(lives);
 
             if (lives == 0)
             {
@@ -76,7 +76,7 @@ public class QuizModel
         
         if (questions.Count > 0)
         {
-            if (OnInvoking != null) OnInvoking();
+            OnInvoking?.Invoke();
         }
         else
         {
@@ -91,18 +91,18 @@ public class QuizModel
         currentQuestion = null;
         questions.Clear();
         questions = null;
-        if (OnClear != null) OnClear();
+        OnClear?.Invoke();
     }
-    
-    async void GameEnd()
+
+    private async void GameEnd()
     {
         await Task.Delay(200);
         QuizVariables.Score = score;
         QuizVariables.CorrectAnswers = correctAnswers;
-        if (OnGameEnd != null) OnGameEnd();
+        OnGameEnd?.Invoke();
 
         //Save score if it lesser than record 
-        int record = PlayerPrefs.GetInt(QuizVariables.TextToSaveRecord);
+        var record = PlayerPrefs.GetInt(QuizVariables.TextToSaveRecord);
         if (score > record)
         {
             PlayerPrefs.SetInt(QuizVariables.TextToSaveRecord, score);

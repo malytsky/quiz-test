@@ -15,8 +15,7 @@ public class QuizView : MonoBehaviour
     //scriptable object file
     [SerializeField] private QuizDataScriptable quizData;
 
-    private QuizOptions quizOptions; 
-    private QuizQuestion quizQuestion; 
+    private QuizOptions quizOptions;
     private QuizTopPanel quizTopPanel; 
     private QuizModel quizModel; 
     private float currentTime;
@@ -24,8 +23,7 @@ public class QuizView : MonoBehaviour
     private void Start()
     {
         //Using patterns Fabric and Builder
-        quizOptions = new QuizOptions(options, correctCol, wrongCol, normalCol); //create options 
-        quizQuestion = new QuizQuestion();                                                    //create question
+        quizOptions = new QuizOptions(options, correctCol, wrongCol, normalCol);              //create options //create question
         quizTopPanel = new QuizTopPanel(scoreText, timerText, lifeImageList);                 //create top panel
         quizModel = new QuizModel();                                                          //create model class for logic methods and operations
 
@@ -58,7 +56,6 @@ public class QuizView : MonoBehaviour
         
         quizOptions.Clear();
         quizOptions = null;
-        quizQuestion = null;
         quizTopPanel = null;
         quizModel = null;
     }
@@ -71,7 +68,7 @@ public class QuizView : MonoBehaviour
     // display the question on the screen
     private void SetQuestion(Question question)
     {
-        quizQuestion.Init(question, questionInfoText, questionImg);
+        QuizQuestion.Init(question, questionInfoText, questionImg);
         quizOptions.UpdateButtons(question.questionOptions);
     }
 
@@ -93,7 +90,8 @@ public class QuizView : MonoBehaviour
     private void Update()
     {
         currentTime += Time.deltaTime;
-        SetTime();
+        var time = TimeSpan.FromSeconds(currentTime);            //set the time and convert to Time format
+        quizTopPanel.SetTime(QuizVariables.TextTime + time.ToString("mm':'ss"));
     }
 
     private void Invoking()
@@ -104,12 +102,6 @@ public class QuizView : MonoBehaviour
     private void SelectQuestion()
     {
         quizModel.SelectQuestion();
-    }
-
-    private void SetTime()
-    {
-        TimeSpan time = TimeSpan.FromSeconds(currentTime);            //set the time and convert to Time format
-        quizTopPanel.SetTime(QuizVariables.TextTime + time.ToString("mm':'ss"));
     }
 }
 

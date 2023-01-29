@@ -1,8 +1,9 @@
+using System;
 using UnityEngine.UI;
 
-public class QuizQuestion
+public static class QuizQuestion
 {
-    public void Init(Question question, Text questionInfoText, Image questionImg)
+    public static void Init(Question question, Text questionInfoText, Image questionImg)
     {
         //check for questionType
         switch (question.questionType)
@@ -16,6 +17,8 @@ public class QuizQuestion
 
                 questionImg.sprite = question.questionImage;                //set the image sprite
                 break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
         questionInfoText.text = question.questionInfo;                      //set the question text
     }

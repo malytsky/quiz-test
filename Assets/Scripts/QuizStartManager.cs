@@ -8,7 +8,8 @@ public class QuizStartManager : MonoBehaviour
     [SerializeField] private Button btnQuit;
     [SerializeField] private Text scoreText;
     [SerializeField] private Toggle randomOrderToggle;
-    void Start()
+
+    private void Start()
     {
         if (btnStart != null)
         {
@@ -27,7 +28,7 @@ public class QuizStartManager : MonoBehaviour
         SceneManager.LoadScene("GameScene");
     }
     
-    private void OnExitButtonClick()
+    private static void OnExitButtonClick()
     {
         Application.Quit();
     }
