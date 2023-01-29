@@ -1,17 +1,12 @@
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class QuizTopPanel
 {
     private readonly Text scoreText, timerText;
-    private readonly List<Image> lifeImageList;
-            
-    public QuizTopPanel(Text scoreText, Text timerText, List<Image> lifeImageList)
+    public QuizTopPanel(Text scoreText, Text timerText)
     {
         this.scoreText = scoreText;
         this.timerText = timerText;
-        this.lifeImageList = lifeImageList;
     }
     
     public void SetTime(string text)
@@ -23,9 +18,5 @@ public class QuizTopPanel
     {
         scoreText.text = text;
     }
-    
-    public void ReduceLife(int remainingLife)
-    {
-        lifeImageList[remainingLife].color = Color.red;
-    }
 }
+    

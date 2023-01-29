@@ -66,14 +66,9 @@ public class QuizModel
             //minus life
             lives--;
             OnReduceLife?.Invoke(lives);
-
-            if (lives == 0)
-            {
-                GameEnd();
-            }
         }
         
-        if (questions.Count > 0)
+        if (questions.Count > 0 && lives > 0)
         {
             InvokeSelectQuestion(400);
         }

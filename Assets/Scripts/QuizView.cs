@@ -16,16 +16,16 @@ public class QuizView : MonoBehaviour
     [SerializeField] private QuizDataScriptable quizData;
 
     private QuizOptions quizOptions;
-    private QuizTopPanel quizTopPanel; 
+    private QuizGameTopPanel quizTopPanel; 
     private QuizModel quizModel; 
     private float currentTime;
 
     private void Start()
     {
         //Using patterns Fabric and Builder
-        quizOptions = new QuizOptions(options, correctCol, wrongCol, normalCol);              //create options 
-        quizTopPanel = new QuizTopPanel(scoreText, timerText, lifeImageList);                 //create top panel
-        quizModel = new QuizModel();                                                          //create model class for logic methods and operations
+        quizOptions = new QuizOptions(options, correctCol, wrongCol, normalCol);  //create options 
+        quizTopPanel = new QuizGameTopPanel(scoreText, timerText, lifeImageList);  //create top panel
+        quizModel = new QuizModel();                                               //create model class for logic methods and operations
 
         quizOptions.OnAnswer += Answer;
         quizModel.OnSetScore += SetScore;
