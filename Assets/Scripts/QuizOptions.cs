@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -8,15 +9,14 @@ public class QuizOptions
     private Color correctCol, wrongCol, normalCol;
     private bool isAnswered;
     private List<Button> options;
-    private QuizView quizView;
-    public QuizOptions(List<Button> options, Color correctCol, Color wrongCol, Color normalCol, QuizView quizView)
+    public event Predicate<string> OnAnswer;
+    public QuizOptions(List<Button> options, Color correctCol, Color wrongCol, Color normalCol)
     {
         this.correctCol = correctCol;
         this.wrongCol = wrongCol;
         this.normalCol = normalCol;
         this.options = options;
-        this.quizView = quizView;
-        
+
         //listener for all options
         foreach (Button localBtn in options)
         {
@@ -33,7 +33,7 @@ public class QuizOptions
             //set answered true
             isAnswered = true;
             //check if answer is correct
-            bool isTrueAnswer = quizView.Answer(btn.name);
+            var isTrueAnswer = OnAnswer != null && OnAnswer(btn.name);
 
             //blinking for true and wrong
             BlinkOption(btn.image, isTrueAnswer ? correctCol : wrongCol);

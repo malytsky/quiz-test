@@ -1,35 +1,43 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class QuizModel
 {
-    private QuizView quizView;
     private List<Question> questions; //questions data
     private Question currentQuestion; //current question data
     private int lives;
     private int score;
     private int correctAnswers;
+    public event Action<string> OnSetScore;
+    public event Action<Question> OnSetQuestion;
+    public event Action<int> OnReduceLife;
+    public event Action OnInvoking;
+    public event Action OnGameEnd;
+    public event Action OnClear;
     
-    public QuizModel(QuizView quizView)
-    {
-        this.quizView = quizView;
-    }
-    public void StartGame()
+    public void StartGame(QuizDataScriptable quizData)
     {
         score = 0;
         correctAnswers = 0;
         lives = QuizVariables.Lives;
-        quizView.SetScore(QuizVariables.TextScore + score);
-        
-        //set the questions data
+        OnSetScore(QuizVariables.TextScore + score);
         questions = new List<Question>();
-        quizView.SetQuestions(questions);
+
+        SetQuestions(quizData);
         QuizVariables.QuestionNums = questions.Count;
 
         SelectQuestion();
     }
+    
+    public void SetQuestions(QuizDataScriptable quizData)
+    {
+        questions.AddRange(quizData.questions);
+    }
+    
     public void SelectQuestion()
     {
         //get the random or not random question from list
@@ -37,7 +45,7 @@ public class QuizModel
         //set the selected question
         currentQuestion = questions[value];
         //send the question to quizView
-        quizView.SetQuestion(currentQuestion);
+        if (OnSetQuestion != null) OnSetQuestion(currentQuestion);
 
         questions.RemoveAt(value);
     }
@@ -51,14 +59,14 @@ public class QuizModel
         {
             correct = true;
             score += QuizVariables.ScoreReward;
-            quizView.SetScore(QuizVariables.TextScore + score);
+            OnSetScore(QuizVariables.TextScore + score);
             correctAnswers++;
         }
         else
         {
             //minus life
             lives--;
-            quizView.ReduceLife(lives);
+            if (OnReduceLife != null) OnReduceLife(lives);
 
             if (lives == 0)
             {
@@ -68,7 +76,7 @@ public class QuizModel
         
         if (questions.Count > 0)
         {
-            quizView.Invoking();
+            if (OnInvoking != null) OnInvoking();
         }
         else
         {
@@ -83,8 +91,7 @@ public class QuizModel
         currentQuestion = null;
         questions.Clear();
         questions = null;
-        quizView.Clear();
-        quizView = null;
+        if (OnClear != null) OnClear();
     }
     
     async void GameEnd()
@@ -92,8 +99,8 @@ public class QuizModel
         await Task.Delay(200);
         QuizVariables.Score = score;
         QuizVariables.CorrectAnswers = correctAnswers;
-        quizView.GameEnd();
-        
+        if (OnGameEnd != null) OnGameEnd();
+
         //Save score if it lesser than record 
         int record = PlayerPrefs.GetInt(QuizVariables.TextToSaveRecord);
         if (score > record)

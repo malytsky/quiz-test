@@ -11,6 +11,14 @@ public class QuizView : MonoBehaviour
     [SerializeField] private List<Image> lifeImageList;
     [SerializeField] private Text questionInfoText;                 //text of question
     [SerializeField] private List<Button> options;                  //options button reference
+    
+    Predicate<string> onAnswerPredicate;
+    Action<string> onSetScoreAction;
+    Action<Question> onSetQuestionAction;
+    Action<int> onReduceLifeAction;
+    Action onGameEndAction;
+    Action onInvokingAction;
+    Action onClearAction;
 
     //scriptableobject file
     [SerializeField] private QuizDataScriptable quizData;
@@ -24,21 +32,46 @@ public class QuizView : MonoBehaviour
     private void Start()
     {
         //Using patterns Fabric and Builder
-        quizOptions = new QuizOptions(options, correctCol, wrongCol, normalCol, this); //create options 
+        quizOptions = new QuizOptions(options, correctCol, wrongCol, normalCol); //create options 
         quizQuestion = new QuizQuestion();                                                    //create question
         quizTopPanel = new QuizTopPanel(scoreText, timerText, lifeImageList);                 //create top panel
-        quizModel = new QuizModel(this);                                               //create model class for logic methods and operations
+        quizModel = new QuizModel();                                                          //create model class for logic methods and operations
+
+        onAnswerPredicate  = btnName => Answer(btnName);
+        onSetScoreAction = text => SetScore(text);
+        onSetQuestionAction = question => SetQuestion(question);
+        onReduceLifeAction = lives => ReduceLife(lives);
+        onGameEndAction = () => GameEnd();
+        onInvokingAction = () => Invoking();
+        onClearAction = () => Clear();
+
+        quizOptions.OnAnswer += onAnswerPredicate;
+        quizModel.OnSetScore += onSetScoreAction;
+        quizModel.OnSetQuestion += onSetQuestionAction;
+        quizModel.OnReduceLife += onReduceLifeAction;
+        quizModel.OnGameEnd += onGameEndAction;
+        quizModel.OnInvoking += onInvokingAction;
+        quizModel.OnClear += onClearAction;
+
         StartGame();
     }
     
     private void StartGame()
     {
         currentTime = 0;
-        quizModel.StartGame();
+        quizModel.StartGame(quizData);
     }
 
     public void Clear()
     {
+        quizOptions.OnAnswer -= onAnswerPredicate;
+        quizModel.OnSetScore -= onSetScoreAction;
+        quizModel.OnSetQuestion -= onSetQuestionAction;
+        quizModel.OnReduceLife -= onReduceLifeAction;
+        quizModel.OnGameEnd -= onGameEndAction;
+        quizModel.OnInvoking -= onInvokingAction;
+        quizModel.OnClear -= onClearAction;
+        
         quizOptions.Clear();
         quizOptions = null;
         quizQuestion = null;
@@ -56,11 +89,6 @@ public class QuizView : MonoBehaviour
     {
         quizQuestion.Init(question, questionInfoText, questionImg);
         quizOptions.UpdateButtons(question.questionOptions);
-    }
-    
-    public void SetQuestions(List<Question> questions)
-    {
-        questions.AddRange(quizData.questions);
     }
 
     public void SetScore(string text)
