@@ -101,7 +101,7 @@ public class QuizModel
         QuizVariables.CorrectAnswers = correctAnswers;
         OnGameEnd?.Invoke();
 
-        //Save score if it lesser than record 
+        //Save score if it more than record 
         var record = PlayerPrefs.GetInt(QuizVariables.TextToSaveRecord);
         if (score > record)
         {
