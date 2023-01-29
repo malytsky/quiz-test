@@ -49,7 +49,7 @@ public class QuizOptions
     public void UpdateButtons(List<string> questionOptions) 
     {
         //assign invisible unused option buttons
-        for (int i = questionOptions.Count; i < options.Count; i++)
+        for (var i = questionOptions.Count; i < options.Count; i++)
         {
             options[i].gameObject.SetActive(false);
         }
