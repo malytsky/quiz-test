@@ -23,7 +23,7 @@ public class QuizView : MonoBehaviour
     private void Start()
     {
         //Using patterns Fabric and Builder
-        quizOptions = new QuizOptions(options, correctCol, wrongCol, normalCol);              //create options //create question
+        quizOptions = new QuizOptions(options, correctCol, wrongCol, normalCol);              //create options 
         quizTopPanel = new QuizTopPanel(scoreText, timerText, lifeImageList);                 //create top panel
         quizModel = new QuizModel();                                                          //create model class for logic methods and operations
 
@@ -68,7 +68,7 @@ public class QuizView : MonoBehaviour
     // display the question on the screen
     private void SetQuestion(Question question)
     {
-        QuizQuestion.Init(question, questionInfoText, questionImg);
+        QuizQuestion.Init(question, questionInfoText, questionImg); //create question
         quizOptions.UpdateButtons(question.questionOptions);
     }
 
