@@ -110,5 +110,4 @@ public class QuizModel
         Clear();
         SceneManager.LoadScene("GameOver");
     }
-   
 }

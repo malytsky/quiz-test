@@ -45,5 +45,4 @@ public class QuizEndManager : MonoBehaviour
         Clear();
         SceneManager.LoadScene("GameStart");
     }
-
 }
