@@ -15,7 +15,6 @@ public class QuizModel
     public event Action<string> OnSetScore;
     public event Action<Question> OnSetQuestion;
     public event Action<int> OnReduceLife;
-    public event Action OnInvoking;
     public event Action OnGameEnd;
     public event Action OnClear;
     
@@ -38,7 +37,7 @@ public class QuizModel
         questions.AddRange(quizData.questions);
     }
     
-    public void SelectQuestion()
+    private void SelectQuestion()
     {
         //get the random or not random question from list
         var value = QuizVariables.RandomOrder ? Random.Range(0, questions.Count) : 0;
@@ -76,7 +75,7 @@ public class QuizModel
         
         if (questions.Count > 0)
         {
-            OnInvoking?.Invoke();
+            InvokeSelectQuestion(400);
         }
         else
         {
@@ -84,6 +83,12 @@ public class QuizModel
         }
             
         return correct;
+    }
+
+    private async void InvokeSelectQuestion(int time)
+    {
+        await Task.Delay(time);
+        SelectQuestion();
     }
 
     private void Clear()
@@ -99,7 +104,6 @@ public class QuizModel
         await Task.Delay(200);
         QuizVariables.Score = score;
         QuizVariables.CorrectAnswers = correctAnswers;
-        OnGameEnd?.Invoke();
 
         //Save score if it more than record 
         var record = PlayerPrefs.GetInt(QuizVariables.TextToSaveRecord);
@@ -107,6 +111,7 @@ public class QuizModel
         {
             PlayerPrefs.SetInt(QuizVariables.TextToSaveRecord, score);
         }
+        OnGameEnd?.Invoke();
         Clear();
         SceneManager.LoadScene("GameOver");
     }

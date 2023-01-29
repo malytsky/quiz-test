@@ -32,7 +32,6 @@ public class QuizView : MonoBehaviour
         quizModel.OnSetQuestion += SetQuestion;
         quizModel.OnReduceLife += ReduceLife;
         quizModel.OnGameEnd += GameEnd;
-        quizModel.OnInvoking += Invoking;
         quizModel.OnClear += Clear;
 
         StartGame();
@@ -51,7 +50,6 @@ public class QuizView : MonoBehaviour
         quizModel.OnSetQuestion -= SetQuestion;
         quizModel.OnReduceLife -= ReduceLife;
         quizModel.OnGameEnd -= GameEnd;
-        quizModel.OnInvoking -= Invoking;
         quizModel.OnClear -= Clear;
         
         quizOptions.Clear();
@@ -92,16 +90,6 @@ public class QuizView : MonoBehaviour
         currentTime += Time.deltaTime;
         var time = TimeSpan.FromSeconds(currentTime);            //set the time and convert to Time format
         quizTopPanel.SetTime(QuizVariables.TextTime + time.ToString("mm':'ss"));
-    }
-
-    private void Invoking()
-    {
-        Invoke(nameof(SelectQuestion), 0.4f);
-    }
-
-    private void SelectQuestion()
-    {
-        quizModel.SelectQuestion();
     }
 }
 
